@@ -1,0 +1,16 @@
+{
+    "name": "url_shortener",
+    "type": "module",
+    "private": true,
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "workspaces": [
+        "server",
+        "db",
+        "worker"
+    ],
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}

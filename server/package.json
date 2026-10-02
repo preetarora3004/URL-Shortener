@@ -1,0 +1,25 @@
+{
+    "name": "@workspace/server",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev" : "bun run ./src/index.ts"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/dotenv": "^8.2.3",
+        "@types/express": "^5.0.6",
+        "@types/ws": "^8.18.2"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "@datastructures-js/priority-queue": "^6.4.0",
+        "dotenv": "^18.0.4",
+        "express": "^5.2.1",
+        "ws": "^8.22.0",
+        "@workspace/db": "workspace:*"
+    }
+}
