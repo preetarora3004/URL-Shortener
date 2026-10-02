@@ -224,10 +224,10 @@ A scheduler will be set for everyday around 4AM, that will scan the DB for URL's
 
 Only those URL's will be removed that don't have the min ratio of 1:30 that is in 30 days 1 redirection has to happen.
 
->[!Formulae]
-The ratio needs to be 30:1 60:2 90:3 120:4
-These are all the multiples of 3, therefore
-I just need to check, if createdAt = 1 Sept and today is 1 Oct. That means days / 30 === minRoundOf(number) = ans. Then, it needs to be
+>[!TIP]
+> The ratio needs to be 30:1 60:2 90:3 120:4
+> These are all the multiples of 30, therefore
+> I just need to check, if createdAt = 1 Sept and today is 1 Oct. That means days / 30 === minRoundOf(number) = ans. Then, it needs to be
 >
 >ans === clicks or < clicks
 
