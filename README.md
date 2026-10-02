@@ -111,6 +111,40 @@ erDiagram
 		string userId FK
 	}
 ```
+# Algorithm 
+
+## Hashing and Collision Algorithm
+Parameters :
+1. Original URL
+2. Attempts
+3. TimeStamp
+4. 
+Generate 4 digit code.
+If, after 3 attempts still fail then add another digit. 
+```typescript
+var attempt = 0
+const code = hash(url + timeStamp, attempt) //4 digit code
+
+retry()
+
+if(attempt > 3) {
+	increase the digit to +1
+}
+```
+
+## URL Expiration System
+### Rough Idea 
+There will be a worker, that is scheduled to be scanning URL table in db.
+A formulae that will be used to determine the expiry time of the url and will be compared with the current time.
+Calculate delay by getting currentTime and subtracting the time the scheduler need to run.
+
+For calculating the expired URL's. 
+Parameter :
+- Min 1 CPM (Click per month) required for validity.
+
+Idea is to divide the creation of url by 30 and truncate it.
+Then, comparing it with the number of clicks.
+
 
 
 
