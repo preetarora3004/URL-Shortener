@@ -103,7 +103,7 @@ config:
 sequenceDiagram
 	participant Client
 	participant Server
-	paricipant Cache
+	participant Cache
 	participant Queue
 	participant Worker
 	participant Database
