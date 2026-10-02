@@ -15,6 +15,64 @@ URL Shortener is a website/application that <span class = "concept">converts the
 4. Collision handling
 5. High read volume
 
+## Features
+1. Create short url
+	- Generates hash code that is unique.
+	- On collision adds extra noise to it.
+	- Save generated hash to the database and cache it.
+2. Fetch original url from short url and redirection
+	- Check for the cache.
+	- If there, redirects.
+	- If not, fetch from database store in cache, then redirects.
+3. Expiration 
+	- If number of clicks per month is less than 1, mark expired.
+
+> [!Note]
+>This is a local project, so things like redis and queue will be replaced by memory. We will be using maps and queue for in memory storage.
+
+# Create Short URL
+Requirements : 
+1. Hash Generator
+	- Parameters required for hashing e.g. original_url, timeStamp, etc.
+	- Hashing Algorithm.
+2. Collision handling system
+	- DB lookup for existing hash code.
+	- Add more noise.
+	- Retries until hashCode becomes unique.
+3. Queue for reducing bottlenecks
+	- Requested action will be stored inside queue.
+4. Workers for processing queues.
+
+>[!Decission]
+>
+>Can use min priority queue for first come first serve.
+
+# Fetching / Redirection
+Requirements :
+1. Map/Redis
+```typescript
+interface ICacheKey {
+	shortUrl: string
+}
+	
+interface ICacheValue{
+	longUrl: string,
+	ttl : DateTime
+}
+const cache = new Map<ICacheKey, ICacheValue}>()	
+```
+
+2. Cache HIT/MISS/Expired mechanism
+	- If cache is there and not expired, redirects.
+	- If cache is not there, fetch latest from DB and cache it with ttl.
+	- If cache is expired, remove it, fetch from the DB and cache it with new ttl.
+
+# URL Expiration
+Requirements :
+	1. A worker with scheduler that runs at midnight for db scanning.
+	2. Fetch createdAt and clicks.
+	3. Ans = trunc(Date.now() - createdAt() / 30) and then Ans <= clicks for skipping else clean.
+
 # Client - Server Achitecture
 
 ## For company around 1,000-10,000 users and high spike.
