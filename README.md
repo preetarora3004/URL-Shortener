@@ -15,7 +15,7 @@ URL Shortener is a website/application that <span class = "concept">converts the
 4. Collision handling
 5. High read volume
 
-## Features
+# Features
 1. Create short url
 	- Generates hash code that is unique.
 	- On collision adds extra noise to it.
@@ -30,7 +30,7 @@ URL Shortener is a website/application that <span class = "concept">converts the
 > [!Note]
 >This is a local project, so things like redis and queue will be replaced by memory. We will be using maps and queue for in memory storage.
 
-# Create Short URL
+## Create Short URL
 Requirements : 
 1. Hash Generator
 	- Parameters required for hashing e.g. original_url, timeStamp, etc.
@@ -47,7 +47,7 @@ Requirements :
 >
 >Can use min priority queue for first come first serve.
 
-# Fetching / Redirection
+## Fetching / Redirection
 Requirements :
 1. Map/Redis
 ```typescript
@@ -67,7 +67,7 @@ const cache = new Map<ICacheKey, ICacheValue}>()
 	- If cache is not there, fetch latest from DB and cache it with ttl.
 	- If cache is expired, remove it, fetch from the DB and cache it with new ttl.
 
-# URL Expiration
+## URL Expiration
 Requirements :
 	1. A worker with scheduler that runs at midnight for db scanning.
 	2. Fetch createdAt and clicks.
