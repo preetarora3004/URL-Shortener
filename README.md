@@ -103,6 +103,7 @@ config:
 sequenceDiagram
 	participant Client
 	participant Server
+	paricipant Cache
 	participant Queue
 	participant Worker
 	participant Database
@@ -112,6 +113,7 @@ sequenceDiagram
 	Queue ->> Worker : Process
 	Worker ->> Database : Stores 
 	Database -->> Server : Response back
+	Server ->> Cache : Cache url with ttl
 	Server -->> Client : Response back
 	
 ```
