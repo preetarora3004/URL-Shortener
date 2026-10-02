@@ -204,10 +204,10 @@ Parameter :
 Idea is to divide the creation of url by 30 and truncate it.
 Then, comparing it with the number of clicks.
 
+# Brainstorming
+
 > [!Note]
 > This is my thought process.
-
-# Brainstorming
 
 ## URL Expiration Stratergy
 Case 1: DB LookUp
