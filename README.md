@@ -2,11 +2,11 @@
 URL Shortener is a website/application that <span class = "concept">converts the lengthy url into a shortened url without changing the IP Address of the url/domain.</span>
 
 >[!For example]
- Original URL : 
- https://preetaroraa/linkedin.com
+> Original URL : 
+> https://preetaroraa/linkedin.com
  >
- Short URL : 
- https://shortbit.ly/ASxSM
+> Short URL : 
+> https://shortbit.ly/ASxSM
 
 ## Features
 1. Short url will be valid upto a certain time period.
