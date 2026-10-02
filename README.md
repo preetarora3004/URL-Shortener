@@ -204,6 +204,99 @@ Parameter :
 Idea is to divide the creation of url by 30 and truncate it.
 Then, comparing it with the number of clicks.
 
+> [!Note]
+> This is my thought process.
+
+# Brainstorming
+
+## URL Expiration Stratergy
+Case 1: DB LookUp
+Save the ttl inside the db and keep workers busy in processing out the expired url's and cleaning it.
+
+<span class = "warning">Problem : DB can have stale urls.</span>
+
+Case 2: Expiring url's with less than 1 CPM (click/month)
+URL table will also be having a column name click, that will track the number of successfull redirections. 
+
+As, this task doesn't need any immediate response. It can happen be scheduled for later and can be put in queue.
+
+A scheduler will be set for everyday around 4AM, that will scan the DB for URL's, lived for atleast 30 days inside db having 0 clicks.
+
+Only those URL's will be removed that don't have the min ratio of 1:30 that is in 30 days 1 redirection has to happen.
+
+>[!Formulae]
+The ratio needs to be 30:1 60:2 90:3 120:4
+These are all the multiples of 3, therefore
+I just need to check, if createdAt = 1 Sept and today is 1 Oct. That means days / 30 === minRoundOf(number) = ans. Then, it needs to be
+>
+>ans === clicks or < clicks
+
+## Generating Hash Code
+Things to consider: 
+1. Should hash code be of 4 digits ?
+Paramters to consider :
+2. Original URL
+3. TimeStamp
+4. Attempts
+If, after 3 attempt still fail, then increase the digits of hashed code.
+
+## Fetch Cache Flow
+```mermaid
+---
+config:
+ sequence:
+  mirrorActors: false
+---
+sequenceDiagram
+
+	participant Controller
+	participant Service
+	participant Cache
+	participant Database
+	
+	Controller ->> Service : {shortURL: string}
+	Service ->> Cache : CacheCheck {hashedCode: string}
+	alt CacheHit
+		Cache -->> Service : Response true
+		Service -->> Cache : Update ttl
+		Service -->> Controller : { Redirection: true }
+	else Cache Miss
+		Cache -->> Service : Miss
+		Service ->> Database : Fetch Cache { hashedCode: string }
+		Database -->> Service : Returns 
+		Service ->> Cache : StoreCache
+		Service -->> Controller : Redirection { hashedCode: string }
+	else Cache Expired
+		Cache -->> Service : Expired
+		Service ->> Database : Fetch Cache { hashedCode: string }
+		Database -->> Service : Returns
+		Service ->> Cache : StoreCache
+		Service -->> Controller : Redirection { hashedCode: string }
+	end
+```
+
+## Cache Expiration
+Components Required :
+1. Worker
+
+
+### Worker Working
+After the server is running, how do I set the interval of exactly 4AM ?
+
+Ideas :
+
+1. Take 24 hour time and start the worker around 4AM.
+2. Calculate the time that is take current time as paramter and subtract it from the 4AM and take that as delay, do this inside the callback function of setInterval.
+
+```typescript
+//formulae
+
+const currentTime = Date.now()
+const date = new Date()
+date.setHours(4,0,0,0)
+const delay = Math.abs(currentTime - date.getTime())
+```
+
 
 
 
