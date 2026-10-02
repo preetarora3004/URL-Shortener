@@ -118,7 +118,6 @@ Parameters :
 1. Original URL
 2. Attempts
 3. TimeStamp
-4. 
 Generate 4 digit code.
 If, after 3 attempts still fail then add another digit. 
 ```typescript
