@@ -20,12 +20,13 @@ export class Service {
     public async createShortUrl(url: string, userId: string) {
         var attempt = 1;
         var digits = 4;
+        var code: string;
 
         if (!url) {
             throw Error("Invalid Input");
         }
 
-        const code = await this.util.generateHashCode(url, 4, 1);
+        code = await this.util.generateHashCode(url, 4, 1);
 
         var isExist: any = await Repository.client.url.findUnique({
             where: {
@@ -34,7 +35,10 @@ export class Service {
         });
 
         if (isExist) {
-            isExist = this.retries(attempt, digits, url);
+            code = await this.retries(attempt, digits, url);
+            if (code.length <= 0) {
+                throw Error("Unable to generate url at this moment");
+            }
         }
 
         const shortUrl = await Repository.client.url.create({
@@ -50,7 +54,6 @@ export class Service {
     }
 
     public async fetchUrl(shortUrl: string) {
-        //extract hashCode
         const hashedCode = shortUrl.at(1) as string;
         const isExist = this.cacheService.checkCache(hashedCode);
 
@@ -92,15 +95,15 @@ export class Service {
     }
 
     private async retries(attempt: number, digit: number, url: string) {
-        var isExist: any;
+        let flag: boolean = true;
+        let code: string = "";
+        let isExist: any;
 
-        while (isExist === undefined || !isExist) {
-            var code: any;
+        while (flag) {
             attempt++;
 
             if (attempt >= 3) {
-                digit++;
-                code = await this.util.generateHashCode(url, digit, attempt);
+                code = await this.util.generateHashCode(url, digit++, attempt++);
                 isExist = await Repository.client.url.findUnique({
                     where: {
                         hashedCode: code,
@@ -114,7 +117,13 @@ export class Service {
                     },
                 });
             }
+
+            if (!isExist) {
+                flag = false;
+                return code;
+            }
         }
-        return isExist;
+
+        return code;
     }
 }

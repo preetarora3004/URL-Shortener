@@ -10,7 +10,7 @@ export class CacheService {
         if (!cache || !cache.ttl) {
             return;
         }
-        cache.ttl = Date.now() + 5 * 60 * 10000;
+        cache.ttl = Date.now() + 5 * 60 * 1000;
         return cache;
     }
 
@@ -23,10 +23,10 @@ export class CacheService {
 
         CacheService.cache.set(hashedCode, {
             originalUrl: originalUrl,
-            ttl: Date.now() + 5 * 60 * 10000,
+            ttl: Date.now() + 5 * 60 * 1000,
         });
 
-        const cache = CacheService.cache.get(hashedCode)
+        const cache = CacheService.cache.get(hashedCode);
 
         return cache;
     }
@@ -44,12 +44,10 @@ export class CacheService {
                 cached: code,
             };
         } else if (code && code.ttl <= Date.now()) {
-            if (this.removeCache(hashedCode)) {
-                return {
-                    success: false,
-                    body: "expired",
-                };
-            }
+            return {
+                success: false,
+                body: "expired",
+            };
         } else {
             return {
                 success: false,
